@@ -1,44 +1,50 @@
-<div class="container">
-    <div class="header">
-        <h1>ISMOM</h1>
-        <p>โปรแกรมเข้าใจ PCOS ด้วยตนเอง</p>
-    </div>
-    
-    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
-
-    <form id="quizForm">
-        <div class="section active" id="sec1">
-            <h3>เริ่มต้นโปรแกรม</h3>
-            <p>กรุณาระบุอีเมลเพื่อรับผลการประเมิน</p>
-            <input type="email" name="email" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-            <button type="button" class="btn" onclick="nextSec(2)">ต่อไป</button>
+<div class="section" id="step4">
+            <h2>หมวดที่ 1 รอบประจำเดือน & การตกไข่</h2>
+            <p style="font-size: 0.85em; color: #666;">เลือกเฉพาะข้อที่คุณเคยพบในช่วงที่ผ่านมา (หากไม่มีให้เลือก "ไม่มีอาการเหล่านี้")</p>
+            <div class="consent-box">
+                <label><input type="checkbox" name="m1" value="irregular"> ประจำเดือนมาไม่สม่ำเสมอ</label><br><br>
+                <label><input type="checkbox" name="m1" value="long_cycle"> รอบเดือนยาวเกิน 35 วัน</label><br><br>
+                <label><input type="checkbox" name="m1" value="missed"> ขาดประจำเดือนติดต่อกันหลายเดือน</label><br><br>
+                <label><input type="checkbox" name="m1" value="abnormal_flow"> ประจำเดือนมาน้อยมาก/ มานานผิดปกติ</label><br><br>
+                <label><input type="checkbox" name="m1" value="no_ovulation"> เคยถูกบอกว่าอาจไม่มีการตกไข่</label><br><br>
+                <label><input type="checkbox" name="m1" value="none"> ไม่มีอาการเหล่านี้</label>
+            </div>
+            <button type="button" class="btn" onclick="nextStep(5)">ต่อไป</button>
         </div>
 
-        <div class="section" id="sec2">
-            <h3>คำชี้แจงและข้อตกลง</h3>
-            <p style="font-size: 0.9em; background: #fff5f6; padding: 10px; border-radius: 5px;">โปรแกรมนี้ไม่ใช่การวินิจฉัย ไม่ใช่บริการแพทย์...</p>
-            <label><input type="checkbox" class="consent"> เข้าใจว่านี่ไม่ใช่การวินิจฉัย</label><br>
-            <label><input type="checkbox" class="consent"> เข้าใจว่านี่ไม่ใช่บริการแพทย์</label><br>
-            <button type="button" class="btn" id="btnConsent" disabled onclick="nextSec(3)">ยอมรับและไปต่อ</button>
+        <div class="section" id="step5">
+            <h2>หมวดที่ 2 ผิวหนัง ขน และเส้นผม</h2>
+            <div class="consent-box">
+                <label><input type="checkbox" name="m2" value="acne"> สิวเรื้อรัง / สิวขึ้นซ้ำ แม้พ้นวัยรุ่น</label><br><br>
+                <label><input type="checkbox" name="m2" value="hormonal_acne"> สิวขึ้นคาง กราม หน้าอก หลัง</label><br><br>
+                <label><input type="checkbox" name="m2" value="hirsutism"> ขนดกผิดปกติ (หน้า คาง หน้าอก หน้าท้อง)</label><br><br>
+                <label><input type="checkbox" name="m2" value="thinning_hair"> ผมร่วง ผมบาง โดยเฉพาะกลางศีรษะ</label><br><br>
+                <label><input type="checkbox" name="m2" value="oily_skin"> ผิวมันมากกว่าปกติ</label><br><br>
+                <label><input type="checkbox" name="m2" value="none"> ไม่มีอาการเหล่านี้</label>
+            </div>
+            <button type="button" class="btn" onclick="nextStep(6)">ต่อไป</button>
         </div>
 
-        </form>
-</div>
+        <div class="section" id="step6">
+            <h2>หมวดที่ 3 & 4 ระบบเผาผลาญ และ อารมณ์</h2>
+            <div class="consent-box">
+                <p><strong>น้ำหนัก & พลังงาน:</strong></p>
+                <label><input type="checkbox" name="m3" value="weight_gain"> น้ำหนักเพิ่มง่าย ลดยาก</label><br><br>
+                <label><input type="checkbox" name="m3" value="belly_fat"> อ้วนลงพุงชัดเจน</label><br><br>
+                <label><input type="checkbox" name="m4" value="mood_swing"> อารมณ์แปรปรวนก่อนมีเมนส์</label><br><br>
+                <label><input type="checkbox" name="m4" value="fatigue"> เครียดง่าย เหนื่อยล้าเรื้อรัง</label>
+            </div>
+            <button type="button" class="btn" onclick="nextStep(7)">สุดท้าย: การชำระเงิน</button>
+        </div>
 
-<script>
-    function nextSec(n) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById('sec' + n).classList.add('active');
-        document.getElementById('progress').style.width = ((n-1)/7 * 100) + '%';
-    }
-
-    // ระบบเช็ค Consent
-    const checks = document.querySelectorAll('.consent');
-    const btnC = document.getElementById('btnConsent');
-    checks.forEach(c => c.addEventListener('change', () => {
-        btnC.disabled = Array.from(checks).some(i => !i.checked);
-    }));
-</script>
-
-</body>
-</html>
+        <div class="section" id="step7">
+            <h2>สรุปและชำระเงิน</h2>
+            <div class="consent-box" style="text-align: center;">
+                <p>ค่าธรรมเนียมสินค้าดิจิทัล</p>
+                <h1 style="color: var(--primary);">790 บาท</h1>
+                <p style="font-size: 0.9em;">ธนาคารออมสิน<br><strong>020337687014</strong><br>บริษัท อีสมัม2555 จำกัด</p>
+            </div>
+            <p>แนบสลิปเพื่อรับผลทางอีเมล:</p>
+            <input type="file" id="slip" accept="image/*" required>
+            <button type="submit" class="btn" style="margin-top:20px; background-color: #28a745;">ส่งข้อมูลและแจ้งโอนเงิน</button>
+        </div>
