@@ -1,0 +1,44 @@
+<div class="container">
+    <div class="header">
+        <h1>ISMOM</h1>
+        <p>โปรแกรมเข้าใจ PCOS ด้วยตนเอง</p>
+    </div>
+    
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+    <form id="quizForm">
+        <div class="section active" id="sec1">
+            <h3>เริ่มต้นโปรแกรม</h3>
+            <p>กรุณาระบุอีเมลเพื่อรับผลการประเมิน</p>
+            <input type="email" name="email" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+            <button type="button" class="btn" onclick="nextSec(2)">ต่อไป</button>
+        </div>
+
+        <div class="section" id="sec2">
+            <h3>คำชี้แจงและข้อตกลง</h3>
+            <p style="font-size: 0.9em; background: #fff5f6; padding: 10px; border-radius: 5px;">โปรแกรมนี้ไม่ใช่การวินิจฉัย ไม่ใช่บริการแพทย์...</p>
+            <label><input type="checkbox" class="consent"> เข้าใจว่านี่ไม่ใช่การวินิจฉัย</label><br>
+            <label><input type="checkbox" class="consent"> เข้าใจว่านี่ไม่ใช่บริการแพทย์</label><br>
+            <button type="button" class="btn" id="btnConsent" disabled onclick="nextSec(3)">ยอมรับและไปต่อ</button>
+        </div>
+
+        </form>
+</div>
+
+<script>
+    function nextSec(n) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById('sec' + n).classList.add('active');
+        document.getElementById('progress').style.width = ((n-1)/7 * 100) + '%';
+    }
+
+    // ระบบเช็ค Consent
+    const checks = document.querySelectorAll('.consent');
+    const btnC = document.getElementById('btnConsent');
+    checks.forEach(c => c.addEventListener('change', () => {
+        btnC.disabled = Array.from(checks).some(i => !i.checked);
+    }));
+</script>
+
+</body>
+</html>
