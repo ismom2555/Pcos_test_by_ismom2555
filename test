@@ -3,146 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISMOM - PCOS Self-Check</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>ISMOM PCOS Check</title>
     <style>
-        :root { --primary: #d46a7e; --bg: #fff5f6; }
-        body { font-family: 'Sarabun', sans-serif; background-color: var(--bg); color: #444; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .section { display: none; } .active { display: block; }
-        .consent-box { background: #fafafa; border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
-        .btn { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; }
-        .btn:disabled { background: #ccc; }
-        input[type="text"], input[type="email"] { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        label { display: block; margin-bottom: 10px; cursor: pointer; }
+        body { font-family: sans-serif; background: #fff5f6; padding: 20px; text-align: center; }
+        .card { background: white; padding: 20px; border-radius: 15px; max-width: 400px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn { background: #d46a7e; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; width: 100%; margin-top: 10px; }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <form id="pcosForm">
-        <div class="section active" id="step1">
-            <h2>ยินดีต้อนรับสู่ ISMOM</h2>
-            <p>กรุณาระบุอีเมลเพื่อรับผลการประเมิน</p>
-            <input type="email" name="email" required placeholder="email@example.com">
-            <button type="button" class="btn" onclick="nextStep(2)">เริ่มทำแบบทดสอบ</button>
-        </div>
-
-        <div class="section" id="step2">
-            <h2>ข้อตกลงและยินยอม</h2>
-            <div class="consent-box">
-                <label><input type="checkbox" class="c-check"> ไม่ใช่การวินิจฉัยโรค</label>
-                <label><input type="checkbox" class="c-check"> ไม่ใช่บริการแพทย์</label>
-                <label><input type="checkbox" class="c-check"> ผลลัพธ์เพื่อความเข้าใจเท่านั้น</label>
-                <label><input type="checkbox" class="c-check"> ฉุกเฉินจะไปโรงพยาบาลทันที</label>
-            </div>
-            <button type="button" class="btn" id="btn2" disabled onclick="nextStep(3)">ยอมรับและไปต่อ</button>
-        </div>
-
-        <div class="section" id="step3">
-            <h2>ข้อมูลพื้นฐาน</h2>
-            <input type="text" name="nickname" placeholder="ชื่อเล่น">
-            <input type="text" name="age" placeholder="อายุ">
-            <button type="button" class="btn" onclick="nextStep(4)">ต่อไป</button>
-        </div>
-
-        <div class="section" id="step4">
-            <h2>หมวดที่ 1: รอบประจำเดือน</h2>
-            <label><input type="checkbox" name="m1" value="irregular"> ประจำเดือนมาไม่สม่ำเสมอ</label>
-            <label><input type="checkbox" name="m1" value="long"> รอบเดือนยาวเกิน 35 วัน</label>
-            <label><input type="checkbox" name="m1" value="none"> ไม่มีอาการเหล่านี้</label>
-            <button type="button" class="btn" onclick="nextStep(5)">ต่อไป</button>
-        </div>
-
-        <div class="section" id="step5">
-            <h2>สรุปและชำระเงิน (790.-)</h2>
-            <p>ธ.ออมสิน: 020337687014<br>บจก. อีสมัม2555</p>
-            <p>แนบสลิป:</p>
+    <div class="card">
+        <h2>ISMOM PCOS Check</h2>
+        <form id="pcosForm">
+            <input type="email" name="email" placeholder="อีเมลของคุณ" required style="width:90%; padding:10px; margin-bottom:10px;">
+            <input type="text" name="nickname" placeholder="ชื่อเล่น" required style="width:90%; padding:10px; margin-bottom:10px;">
+            <p>แนบสลิปโอนเงิน (790.-)</p>
             <input type="file" id="slip" accept="image/*" required>
-            <button type="submit" class="btn" style="background:#28a745;">ส่งข้อมูล</button>
-        </div>
-    </form>
-</div>
+            <button type="submit" class="btn">ส่งข้อมูล</button>
+        </form>
+    </div>
 
-<script>
-    function nextStep(n) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById('step' + n).classList.add('active');
-    }
+    <script>
+        document.getElementById('pcosForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const scriptURL = https://script.google.com/u/0/home/projects/1CjHsLs9gR1ZaYRT0tRAV4c2-Nwnx4OCC8rdGSo3x0YZn7LmpaygUTy9Y/edit; 
+            
+            btn.innerText = "กำลังส่ง...";
+            btn.disabled = true;
 
-    const checks = document.querySelectorAll('.c-check');
-    checks.forEach(c => c.addEventListener('change', () => {
-        document.getElementById('btn2').disabled = !Array.from(checks).every(i => i.checked);
-    }));
+            const fileInput = document.getElementById('slip');
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const finalData = {
+                    email: e.target.email.value,
+                    nickname: e.target.nickname.value,
+                    fileContent: event.target.result.split(',')[1],
+                    fileName: fileInput.files[0].name
+                };
 
-<script>
-    // 1. ระบบเปลี่ยนหน้า (Next Step)
-    function nextStep(n) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById('step' + n).classList.add('active');
-        window.scrollTo(0, 0); // ให้เลื่อนขึ้นไปบนสุดเวลาเปลี่ยนหน้า
-    }
-
-    // 2. ระบบเช็คการกดยินยอม (Consent)
-    const checks = document.querySelectorAll('.c-check');
-    checks.forEach(c => c.addEventListener('change', () => {
-        document.getElementById('btn2').disabled = !Array.from(checks).every(i => i.checked);
-    }));
-
-    // 3. ระบบส่งข้อมูลไปยัง Google Sheets (วางทับส่วนที่คุณถาม)
-    document.getElementById('pcosForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const btn = e.target.querySelector('button[type="submit"]');
-        
-        // *** สำคัญ: นำ URL ที่ได้จาก Google Apps Script มาวางตรงนี้ ***
-        const scriptURL = 'ใส่_URL_ของ_APPS_SCRIPT_ที่คุณก๊อปปี้มา'; 
-
-        btn.innerText = "กำลังส่งข้อมูล... โปรดรอสักครู่";
-        btn.disabled = true;
-
-        const fileInput = document.getElementById('slip');
-        const file = fileInput.files[0];
-        const reader = new FileReader();
-
-        reader.onload = function(event) {
-            const base64Content = event.target.result.split(',')[1];
-            const formData = new FormData(document.getElementById('pcosForm'));
-            const data = Object.fromEntries(formData.entries());
-
-            // รวมข้อมูลทั้งหมด
-            const finalData = {
-                ...data,
-                fileContent: base64Content,
-                fileName: file.name,
-                fileType: file.type
+                fetch(scriptURL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: new URLSearchParams(finalData)
+                }).then(() => {
+                    alert("ส่งสำเร็จ!");
+                    location.reload();
+                }).catch(() => alert("เกิดข้อผิดพลาด"));
             };
-
-            // ส่งข้อมูลด้วยวิธี POST
-            fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: new URLSearchParams(finalData)
-            })
-            .then(() => {
-                alert("ส่งข้อมูลและสลิปสำเร็จ! ทีมงานจะตรวจสอบและส่งผลให้ทางอีเมลโดยเร็วที่สุด");
-                location.reload(); // กลับไปหน้าแรก
-            })
-            .catch(err => {
-                alert("เกิดข้อผิดพลาด: " + err.message);
-                btn.disabled = false;
-                btn.innerText = "ส่งข้อมูล";
-            });
-        };
-
-        if (file) {
-            reader.readAsDataURL(file);
-        } else {
-            alert("กรุณาแนบสลิปโอนเงิน");
-            btn.disabled = false;
-            btn.innerText = "ส่งข้อมูล";
-        }
-    });
-</script>
+            reader.readAsDataURL(fileInput.files[0]);
+        });
+    </script>
 </body>
 </html>
