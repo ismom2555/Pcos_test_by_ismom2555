@@ -75,7 +75,74 @@
         document.getElementById('btn2').disabled = !Array.from(checks).every(i => i.checked);
     }));
 
-    // ส่วนส่งข้อมูลจะเชื่อมกับ Google Sheets ในขั้นตอนถัดไป
+<script>
+    // 1. ระบบเปลี่ยนหน้า (Next Step)
+    function nextStep(n) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById('step' + n).classList.add('active');
+        window.scrollTo(0, 0); // ให้เลื่อนขึ้นไปบนสุดเวลาเปลี่ยนหน้า
+    }
+
+    // 2. ระบบเช็คการกดยินยอม (Consent)
+    const checks = document.querySelectorAll('.c-check');
+    checks.forEach(c => c.addEventListener('change', () => {
+        document.getElementById('btn2').disabled = !Array.from(checks).every(i => i.checked);
+    }));
+
+    // 3. ระบบส่งข้อมูลไปยัง Google Sheets (วางทับส่วนที่คุณถาม)
+    document.getElementById('pcosForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const btn = e.target.querySelector('button[type="submit"]');
+        
+        // *** สำคัญ: นำ URL ที่ได้จาก Google Apps Script มาวางตรงนี้ ***
+        const scriptURL = 'ใส่_URL_ของ_APPS_SCRIPT_ที่คุณก๊อปปี้มา'; 
+
+        btn.innerText = "กำลังส่งข้อมูล... โปรดรอสักครู่";
+        btn.disabled = true;
+
+        const fileInput = document.getElementById('slip');
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+            const base64Content = event.target.result.split(',')[1];
+            const formData = new FormData(document.getElementById('pcosForm'));
+            const data = Object.fromEntries(formData.entries());
+
+            // รวมข้อมูลทั้งหมด
+            const finalData = {
+                ...data,
+                fileContent: base64Content,
+                fileName: file.name,
+                fileType: file.type
+            };
+
+            // ส่งข้อมูลด้วยวิธี POST
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: new URLSearchParams(finalData)
+            })
+            .then(() => {
+                alert("ส่งข้อมูลและสลิปสำเร็จ! ทีมงานจะตรวจสอบและส่งผลให้ทางอีเมลโดยเร็วที่สุด");
+                location.reload(); // กลับไปหน้าแรก
+            })
+            .catch(err => {
+                alert("เกิดข้อผิดพลาด: " + err.message);
+                btn.disabled = false;
+                btn.innerText = "ส่งข้อมูล";
+            });
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            alert("กรุณาแนบสลิปโอนเงิน");
+            btn.disabled = false;
+            btn.innerText = "ส่งข้อมูล";
+        }
+    });
 </script>
 </body>
 </html>
