@@ -1,1 +1,81 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISMOM - PCOS Self-Check</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #d46a7e; --bg: #fff5f6; }
+        body { font-family: 'Sarabun', sans-serif; background-color: var(--bg); color: #444; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .section { display: none; } .active { display: block; }
+        .consent-box { background: #fafafa; border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .btn { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; }
+        .btn:disabled { background: #ccc; }
+        input[type="text"], input[type="email"] { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        label { display: block; margin-bottom: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
 
+<div class="container">
+    <form id="pcosForm">
+        <div class="section active" id="step1">
+            <h2>ยินดีต้อนรับสู่ ISMOM</h2>
+            <p>กรุณาระบุอีเมลเพื่อรับผลการประเมิน</p>
+            <input type="email" name="email" required placeholder="email@example.com">
+            <button type="button" class="btn" onclick="nextStep(2)">เริ่มทำแบบทดสอบ</button>
+        </div>
+
+        <div class="section" id="step2">
+            <h2>ข้อตกลงและยินยอม</h2>
+            <div class="consent-box">
+                <label><input type="checkbox" class="c-check"> ไม่ใช่การวินิจฉัยโรค</label>
+                <label><input type="checkbox" class="c-check"> ไม่ใช่บริการแพทย์</label>
+                <label><input type="checkbox" class="c-check"> ผลลัพธ์เพื่อความเข้าใจเท่านั้น</label>
+                <label><input type="checkbox" class="c-check"> ฉุกเฉินจะไปโรงพยาบาลทันที</label>
+            </div>
+            <button type="button" class="btn" id="btn2" disabled onclick="nextStep(3)">ยอมรับและไปต่อ</button>
+        </div>
+
+        <div class="section" id="step3">
+            <h2>ข้อมูลพื้นฐาน</h2>
+            <input type="text" name="nickname" placeholder="ชื่อเล่น">
+            <input type="text" name="age" placeholder="อายุ">
+            <button type="button" class="btn" onclick="nextStep(4)">ต่อไป</button>
+        </div>
+
+        <div class="section" id="step4">
+            <h2>หมวดที่ 1: รอบประจำเดือน</h2>
+            <label><input type="checkbox" name="m1" value="irregular"> ประจำเดือนมาไม่สม่ำเสมอ</label>
+            <label><input type="checkbox" name="m1" value="long"> รอบเดือนยาวเกิน 35 วัน</label>
+            <label><input type="checkbox" name="m1" value="none"> ไม่มีอาการเหล่านี้</label>
+            <button type="button" class="btn" onclick="nextStep(5)">ต่อไป</button>
+        </div>
+
+        <div class="section" id="step5">
+            <h2>สรุปและชำระเงิน (790.-)</h2>
+            <p>ธ.ออมสิน: 020337687014<br>บจก. อีสมัม2555</p>
+            <p>แนบสลิป:</p>
+            <input type="file" id="slip" accept="image/*" required>
+            <button type="submit" class="btn" style="background:#28a745;">ส่งข้อมูล</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function nextStep(n) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById('step' + n).classList.add('active');
+    }
+
+    const checks = document.querySelectorAll('.c-check');
+    checks.forEach(c => c.addEventListener('change', () => {
+        document.getElementById('btn2').disabled = !Array.from(checks).every(i => i.checked);
+    }));
+
+    // ส่วนส่งข้อมูลจะเชื่อมกับ Google Sheets ในขั้นตอนถัดไป
+</script>
+</body>
+</html>
