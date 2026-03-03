@@ -53,5 +53,61 @@
             reader.readAsDataURL(fileInput.files[0]);
         });
     </script>
+    <script>
+  const scriptURL = 'ใส่_WEB_APP_URL_ที่ได้จาก_APPS_SCRIPT_ตรงนี้';
+  const form = document.querySelector('form'); // ตรวจสอบว่าใน HTML มีแท็ก <form>
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    
+    // เปลี่ยนข้อความที่ปุ่มเพื่อบอกผู้ใช้ว่ากำลังส่ง
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.innerHTML = "กำลังส่งข้อมูล...";
+
+    const fileInput = document.querySelector('input[type="file"]');
+    const file = fileInput.files[0];
+
+    // ถ้ามีการแนบไฟล์รูป
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function() {
+        const base64Data = reader.result.split(',')[1];
+        sendData(base64Data, file.type, file.name);
+      };
+    } else {
+      sendData(null, null, null);
+    }
+
+    function sendData(base64Data, fileType, fileName) {
+      const formData = new FormData(form);
+      const data = {};
+      formData.forEach((value, key) => { data[key] = value });
+
+      // เพิ่มข้อมูลไฟล์ลงไปในก้อนที่จะส่ง
+      data.fileContent = base64Data;
+      data.fileType = fileType;
+      data.fileName = fileName;
+
+      // ส่งข้อมูลไปที่ Google Apps Script
+      fetch(scriptURL, { 
+        method: 'POST', 
+        mode: 'no-cors', // สำคัญ: เพื่อไม่ให้ติดปัญหาเรื่องความปลอดภัยเบื้องต้น
+        body: new URLSearchParams(data) 
+      })
+      .then(() => {
+        alert('ส่งข้อมูลสำเร็จ! ระบบจะส่งผลให้ทางอีเมลโดยเร็วที่สุด');
+        window.location.reload(); // รีโหลดหน้าใหม่เพื่อให้พร้อมสำหรับคนต่อไป
+      })
+      .catch(error => {
+        console.error('Error!', error.message);
+        alert('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง');
+        submitButton.disabled = false;
+        submitButton.innerHTML = "ส่งข้อมูล";
+      });
+    }
+  });
+</script>
 </body>
 </html>
