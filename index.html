@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISMOM PCOS Check</title>
+    <style>
+        body { font-family: sans-serif; background: #fff5f6; padding: 20px; text-align: center; }
+        .card { background: white; padding: 20px; border-radius: 15px; max-width: 400px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn { background: #d46a7e; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>ISMOM PCOS Check</h2>
+        <form id="pcosForm">
+            <input type="email" name="email" placeholder="อีเมลของคุณ" required style="width:90%; padding:10px; margin-bottom:10px;">
+            <input type="text" name="nickname" placeholder="ชื่อเล่น" required style="width:90%; padding:10px; margin-bottom:10px;">
+            <p>แนบสลิปโอนเงิน (790.-)</p>
+            <input type="file" id="slip" accept="image/*" required>
+            <button type="submit" class="btn">ส่งข้อมูล</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('pcosForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const scriptURL = https://script.google.com/u/0/home/projects/1CjHsLs9gR1ZaYRT0tRAV4c2-Nwnx4OCC8rdGSo3x0YZn7LmpaygUTy9Y/edit; 
+            
+            btn.innerText = "กำลังส่ง...";
+            btn.disabled = true;
+
+            const fileInput = document.getElementById('slip');
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const finalData = {
+                    email: e.target.email.value,
+                    nickname: e.target.nickname.value,
+                    fileContent: event.target.result.split(',')[1],
+                    fileName: fileInput.files[0].name
+                };
+
+                fetch(scriptURL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: new URLSearchParams(finalData)
+                }).then(() => {
+                    alert("ส่งสำเร็จ!");
+                    location.reload();
+                }).catch(() => alert("เกิดข้อผิดพลาด"));
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        });
+    </script>
+</body>
+</html>
