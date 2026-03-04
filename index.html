@@ -60,11 +60,15 @@
             <h2>อีเมลของคุณ</h2>
             <input type="email" name="email" placeholder="example@email.com" required>
             <p class="error-msg">⚠️ กรุณากรอกอีเมลให้ถูกต้อง</p>
-            <div class="btn-group">
-                <button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button>
-                <button type="button" class="btn" onclick="validateAndNext(this)">ต่อไป</button>
-            </div>
-        </div>
+            <div class="step" data-validate="input"> 
+    <h2>ข้อมูลพื้นฐานผู้ใช้</h2>
+    <input type="text" name="nickname" placeholder="ชื่อเล่น" required>
+    <input type="number" name="age" placeholder="อายุ" required>
+    <p class="error-msg">⚠️ กรุณากรอกข้อมูลให้ครบถ้วน</p> <div class="btn-group">
+        <button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button>
+        <button type="button" class="btn" onclick="validateAndNext(this)">ต่อไป</button>
+    </div>
+</div>
 
         <div class="step" data-validate="all-checkbox">
             <h2>Orientation & Consent</h2>
