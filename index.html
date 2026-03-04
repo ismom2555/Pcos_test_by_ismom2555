@@ -14,40 +14,54 @@
         }
 
         body { font-family: 'Chakra Petch', sans-serif; background: var(--bg-color); padding: 20px; color: #333; margin: 0; }
-        .container { max-width: 480px; margin: 40px auto; background: white; padding: 35px; border-radius: 24px; box-shadow: var(--card-shadow); }
-        h2 { color: var(--main-color); margin-bottom: 20px; font-size: 1.5em; text-align: center; font-weight: 700; }
-        p { line-height: 1.6; font-size: 1em; color: #555; text-align: center; }
-        .instruction { font-size: 0.9em; color: #d46a7e; margin-bottom: 20px; background: #fff0f2; padding: 12px; border-radius: 12px; text-align: center; border: 1px dashed var(--main-color); }
+        .container { max-width: 480px; margin: 30px auto; background: white; padding: 35px; border-radius: 24px; box-shadow: var(--card-shadow); }
         
+        h2 { color: var(--main-color); margin-bottom: 20px; font-size: 1.4em; text-align: center; font-weight: 700; line-height: 1.3; }
+        p { line-height: 1.6; font-size: 0.95em; color: #555; text-align: center; }
+        
+        .medical-note { 
+            font-size: 0.9em; color: #666; background: #fdf2f4; padding: 18px; border-radius: 15px; 
+            margin-bottom: 20px; text-align: left; border-left: 5px solid var(--main-color);
+        }
+
+        .instruction { font-size: 0.85em; color: var(--main-color); margin-bottom: 15px; text-align: center; font-weight: bold; }
+
         input[type="text"], input[type="email"], input[type="number"] { 
-            width: 100%; padding: 14px; margin: 12px 0; border: 1.5px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1em;
+            width: 100%; padding: 14px; margin: 10px 0; border: 1.5px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1em; transition: 0.3s;
         }
-        input:invalid { border-color: #ffcfd6; }
+        input:focus { border-color: var(--main-color); outline: none; background: #fffcfc; }
 
-        .option-group { text-align: left; margin: 20px 0; }
+        .option-group { text-align: left; margin: 15px 0; }
         .option-group label { 
-            display: flex; align-items: center; padding: 14px 18px; border: 1.5px solid #f0f0f0; margin-bottom: 10px; border-radius: 14px; cursor: pointer; transition: 0.2s; 
+            display: flex; align-items: center; padding: 14px 18px; border: 1.5px solid #f0f0f0; 
+            margin-bottom: 10px; border-radius: 14px; cursor: pointer; transition: all 0.2s; 
         }
-        .option-group label:hover { background: #fff9f9; border-color: var(--main-color); }
+        .option-group label:hover { background: #fff9f9; border-color: var(--main-color); transform: translateY(-2px); }
+        .option-group input { margin-right: 12px; width: 18px; height: 18px; accent-color: var(--main-color); }
         
-        /* สไตล์เมื่อมีการเลือก (Active State) */
-        .option-group input:checked + span { font-weight: bold; color: var(--main-color); }
-        .option-group label:has(input:checked) { border-color: var(--main-color); background: #fff0f2; }
+        /* สไตล์เมื่อเลือกแล้ว */
+        .option-group label:has(input:checked) { border-color: var(--main-color); background: #fff0f2; font-weight: bold; }
 
-        .btn-group { margin-top: 30px; display: flex; gap: 12px; }
+        .btn-group { margin-top: 25px; display: flex; gap: 12px; }
         .btn { 
-            flex: 1; background: var(--main-color); color: white; border: none; padding: 16px; border-radius: 16px; cursor: pointer; font-size: 1.1em; font-weight: 700; transition: 0.3s;
+            flex: 1; background: var(--main-color); color: white; border: none; padding: 16px; 
+            border-radius: 16px; cursor: pointer; font-size: 1.1em; font-weight: 700; transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(212, 106, 126, 0.2);
         }
         .btn:hover { background: var(--main-hover); transform: translateY(-2px); }
-        .btn-back { background: #f5f5f5; color: #888; }
+        .btn-back { background: #f5f5f5; color: #888; box-shadow: none; }
 
         .progress { height: 6px; background: #f0f0f0; border-radius: 10px; margin-bottom: 30px; }
         .progress-bar { height: 100%; background: var(--main-color); width: 0%; border-radius: 10px; transition: 0.4s; }
-        .step { display: none; }
-        .step.active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; } }
 
-        .error-msg { color: #e74c3c; font-size: 0.85em; display: none; text-align: center; margin-top: -10px; margin-bottom: 10px; }
+        .step { display: none; }
+        .step.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .error-msg { color: #e74c3c; font-size: 0.85em; display: none; text-align: center; margin-bottom: 15px; font-weight: bold; }
+        
+        @keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-8px);} 75% {transform: translateX(8px);} }
+        .shake { animation: shake 0.3s ease-in-out; }
     </style>
 </head>
 <body>
@@ -56,16 +70,28 @@
     <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
     <form id="pcosForm">
         
-        <div class="step active">
-            <h2>PCOS Check Program</h2>
-            <p>โปรแกรมเข้าใจ PCOS ด้วยตนเอง<br>โดย ISMOM</p><br>
-            <button type="button" class="btn" onclick="nextStep()">เริ่มโปรแกรม</button>
+        <div class="step active" data-validate="checkbox">
+            <h2>ประวัติการแพทย์เบื้องต้น</h2>
+            <div class="medical-note">
+                หมวดนี้สำรวจประสบการณ์ที่คุณเคยได้รับข้อมูลหรือการตรวจมาก่อน เช่น การตรวจอัลตราซาวด์ หรือการใช้ฮอร์โมน รวมถึงประวัติสุขภาพของคนในครอบครัว<br><br>
+                <i>*การเลือกข้อใดข้อหนึ่ง ไม่ได้หมายความว่าคุณมีภาวะนั้นในปัจจุบัน</i>
+            </div>
+            <div class="option-group">
+                <label><input type="checkbox" name="m_history" value="สงสัย PCOS"><span>เคยถูกบอกว่า “สงสัย PCOS”</span></label>
+                <label><input type="checkbox" name="m_history" value="อัลตราซาวด์"><span>เคยตรวจอัลตราซาวด์รังไข่</span></label>
+                <label><input type="checkbox" name="m_history" value="ใช้ฮอร์โมน"><span>เคยใช้ฮอร์โมน / ยาคุม เพื่อปรับรอบเดือน</span></label>
+                <label><input type="checkbox" name="m_history" value="ครอบครัวเป็น"><span>มีคนในครอบครัวเป็น PCOS / เบาหวาน</span></label>
+                <label><input type="checkbox" name="m_history" value="ไม่มีประวัติ" onclick="clearOthers(this)"><span>ไม่เคยมีประวัติเหล่านี้</span></label>
+            </div>
+            <p class="error-msg">⚠️ กรุณาเลือกอย่างน้อย 1 ข้อ</p>
+            <button type="button" class="btn" onclick="validateAndNext(this)">ต่อไป</button>
         </div>
 
         <div class="step" data-validate="input">
             <h2>อีเมลของคุณ</h2>
+            <p>ระบุอีเมลเพื่อรับผลการประเมินทางอีเมล</p>
             <input type="email" name="email" placeholder="example@email.com" required>
-            <p class="error-msg">กรุณากรอกอีเมลให้ถูกต้อง</p>
+            <p class="error-msg">⚠️ กรุณากรอกอีเมลให้ถูกต้อง</p>
             <div class="btn-group">
                 <button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button>
                 <button type="button" class="btn" onclick="validateAndNext(this)">ต่อไป</button>
@@ -76,7 +102,7 @@
             <h2>ข้อมูลเบื้องต้น</h2>
             <input type="text" name="nickname" placeholder="ชื่อเล่น" required>
             <input type="number" name="age" placeholder="อายุ" required>
-            <p class="error-msg">กรุณากรอกข้อมูลให้ครบถ้วน</p>
+            <p class="error-msg">⚠️ กรุณากรอกข้อมูลให้ครบถ้วน</p>
             <div class="btn-group">
                 <button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button>
                 <button type="button" class="btn" onclick="validateAndNext(this)">ต่อไป</button>
@@ -85,41 +111,38 @@
 
         <div class="step" data-validate="checkbox">
             <h2>หมวดที่ 1: รอบประจำเดือน</h2>
-            <p class="instruction">เลือกอย่างน้อย 1 ข้อ</p>
+            <p class="instruction">เลือกเฉพาะข้อที่เคยพบ</p>
             <div class="option-group">
                 <label><input type="checkbox" name="m1" value="ไม่สม่ำเสมอ"><span>ประจำเดือนมาไม่สม่ำเสมอ</span></label>
                 <label><input type="checkbox" name="m1" value="รอบยาว"><span>รอบเดือนยาวเกิน 35 วัน</span></label>
                 <label><input type="checkbox" name="m1" value="ขาดประจำเดือน"><span>ขาดประจำเดือนติดต่อกันหลายเดือน</span></label>
                 <label><input type="checkbox" name="m1" value="ไม่มีอาการเหล่านี้" onclick="clearOthers(this)"><span>ไม่มีอาการเหล่านี้</span></label>
             </div>
-            <p class="error-msg">กรุณาเลือกอย่างน้อย 1 ข้อ</p>
-            <div class="btn-group"><button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button><button type="button" class="btn" onclick="validateAndNext(this)">ต่อไป</button></div>
-        </div>
-
-        <div class="step" data-validate="checkbox">
-            <h2>หมวดที่ 2: ผิวหนัง ขน และผม</h2>
-            <div class="option-group">
-                <label><input type="checkbox" name="m2" value="สิวเรื้อรัง"><span>สิวเรื้อรัง</span></label>
-                <label><input type="checkbox" name="m2" value="ขนดก"><span>ขนดกผิดปกติ</span></label>
-                <label><input type="checkbox" name="m2" value="ผมร่วง"><span>ผมบางกลางศีรษะ</span></label>
-                <label><input type="checkbox" name="m2" value="ไม่มีอาการเหล่านี้" onclick="clearOthers(this)"><span>ไม่มีอาการเหล่านี้</span></label>
+            <p class="error-msg">⚠️ กรุณาเลือกอย่างน้อย 1 ข้อ</p>
+            <div class="btn-group">
+                <button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button>
+                <button type="button" class="btn" onclick="validateAndNext(this)">ต่อไป</button>
             </div>
-            <p class="error-msg">กรุณาเลือกอย่างน้อย 1 ข้อ</p>
-            <div class="btn-group"><button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button><button type="button" class="btn" onclick="validateAndNext(this)">ต่อไป</button></div>
         </div>
 
         <div class="step" data-validate="radio">
             <h2>การชำระเงิน (790.-)</h2>
+            <div style="background: #f8f9fa; border: 2px solid #eee; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 20px;">
+                <p>ธนาคารออมสิน</p>
+                <p style="font-size: 1.3em; font-weight: bold; color: #333; margin: 5px 0;">020337687014</p>
+                <p>บจก. อีสมัม2555 จำกัด</p>
+            </div>
             <div class="option-group">
                 <label><input type="radio" name="pay_status" value="paid" onclick="toggleSlip(true)"><span>ชำระเงินเรียบร้อยแล้ว</span></label>
             </div>
-            <div id="slipSection" style="display:none;">
+            <div id="slipSection" style="display:none; text-align: left;">
+                <p style="margin-bottom: 8px;">แนบสลิปโอนเงิน:</p>
                 <input type="file" id="slipFile" accept="image/*">
             </div>
-            <p class="error-msg">กรุณายืนยันการชำระเงิน</p>
+            <p class="error-msg">⚠️ กรุณายืนยันการชำระเงิน</p>
             <div class="btn-group">
                 <button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button>
-                <button type="submit" class="btn" id="submitBtn">ส่งข้อมูล</button>
+                <button type="submit" class="btn" id="submitBtn">ยืนยันและส่งข้อมูล</button>
             </div>
         </div>
 
@@ -127,15 +150,15 @@
 </div>
 
 <script>
-    const scriptURL = 'YOUR_URL_HERE';
+    const scriptURL = 'ใส่_URL_ของ_Apps_Script_ที่นี่';
     let currentStep = 0;
     const steps = document.querySelectorAll('.step');
+    const form = document.getElementById('pcosForm');
 
     function updateProgress() {
         document.getElementById('progressBar').style.width = ((currentStep / (steps.length - 1)) * 100) + '%';
     }
 
-    // ฟังก์ชันตรวจสอบความถูกต้องก่อนไปหน้าถัดไป
     function validateAndNext(btn) {
         const step = steps[currentStep];
         const type = step.getAttribute('data-validate');
@@ -155,9 +178,8 @@
             nextStep();
         } else {
             step.querySelector('.error-msg').style.display = 'block';
-            // สั่นปุ่มเบาๆ เพื่อเตือน
-            btn.style.animation = "shake 0.2s ease-in-out 0s 2";
-            setTimeout(() => btn.style.animation = "", 400);
+            btn.classList.add('shake');
+            setTimeout(() => btn.classList.remove('shake'), 400);
         }
     }
 
@@ -183,11 +205,41 @@
     }
 
     function toggleSlip(show) { document.getElementById('slipSection').style.display = show ? 'block' : 'none'; }
-    
-    // CSS Shake Animation
-    const style = document.createElement('style');
-    style.innerHTML = `@keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);} }`;
-    document.head.appendChild(style);
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = "กำลังส่งข้อมูล...";
+
+        const fileInput = document.getElementById('slipFile');
+        const file = fileInput.files[0];
+
+        const sendData = (base64 = "", type = "", name = "") => {
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            
+            // รวบรวมค่าจาก checkbox ทั้งหมด
+            ['m_history','m1','m2','m3','m4','m6'].forEach(k => {
+                const checked = Array.from(document.querySelectorAll(`input[name="${k}"]:checked`)).map(c => c.value);
+                data[k] = checked.join(', ');
+            });
+
+            data.fileContent = base64;
+            data.fileType = type;
+            data.fileName = name;
+
+            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(data) })
+            .then(() => { alert('ส่งข้อมูลสำเร็จ!'); location.reload(); })
+            .catch(() => { alert('เกิดข้อผิดพลาด'); btn.disabled = false; btn.innerHTML = "ยืนยันและส่งข้อมูล"; });
+        };
+
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => sendData(reader.result.split(',')[1], file.type, file.name);
+        } else { sendData(); }
+    });
 </script>
 </body>
 </html>
