@@ -6,25 +6,48 @@
     <title>ISMOM PCOS Check</title>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --main-color: #d46a7e; --bg-color: #fff5f6; }
-        body { font-family: 'Chakra Petch', sans-serif; background: var(--bg-color); padding: 20px; color: #333; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        :root { 
+            --main-color: #d46a7e; 
+            --main-hover: #b85265;
+            --bg-color: #fff5f6; 
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        body { font-family: 'Chakra Petch', sans-serif; background: var(--bg-color); padding: 20px; color: #333; margin: 0; }
+        .container { max-width: 480px; margin: 40px auto; background: white; padding: 35px; border-radius: 24px; box-shadow: var(--card-shadow); }
+        h2 { color: var(--main-color); margin-bottom: 20px; font-size: 1.5em; text-align: center; font-weight: 700; }
+        p { line-height: 1.6; font-size: 1em; color: #555; text-align: center; }
+        .instruction { font-size: 0.9em; color: #d46a7e; margin-bottom: 20px; background: #fff0f2; padding: 12px; border-radius: 12px; text-align: center; border: 1px dashed var(--main-color); }
+        
+        input[type="text"], input[type="email"], input[type="number"] { 
+            width: 100%; padding: 14px; margin: 12px 0; border: 1.5px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1em;
+        }
+        input:invalid { border-color: #ffcfd6; }
+
+        .option-group { text-align: left; margin: 20px 0; }
+        .option-group label { 
+            display: flex; align-items: center; padding: 14px 18px; border: 1.5px solid #f0f0f0; margin-bottom: 10px; border-radius: 14px; cursor: pointer; transition: 0.2s; 
+        }
+        .option-group label:hover { background: #fff9f9; border-color: var(--main-color); }
+        
+        /* สไตล์เมื่อมีการเลือก (Active State) */
+        .option-group input:checked + span { font-weight: bold; color: var(--main-color); }
+        .option-group label:has(input:checked) { border-color: var(--main-color); background: #fff0f2; }
+
+        .btn-group { margin-top: 30px; display: flex; gap: 12px; }
+        .btn { 
+            flex: 1; background: var(--main-color); color: white; border: none; padding: 16px; border-radius: 16px; cursor: pointer; font-size: 1.1em; font-weight: 700; transition: 0.3s;
+        }
+        .btn:hover { background: var(--main-hover); transform: translateY(-2px); }
+        .btn-back { background: #f5f5f5; color: #888; }
+
+        .progress { height: 6px; background: #f0f0f0; border-radius: 10px; margin-bottom: 30px; }
+        .progress-bar { height: 100%; background: var(--main-color); width: 0%; border-radius: 10px; transition: 0.4s; }
         .step { display: none; }
-        .step.active { display: block; animation: fadeIn 0.4s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        h2 { color: var(--main-color); margin-bottom: 15px; font-size: 1.4em; }
-        p { line-height: 1.5; font-size: 0.95em; color: #555; }
-        .instruction { font-size: 0.85em; color: #888; margin-bottom: 15px; background: #fef0f2; padding: 10px; border-radius: 8px; border-left: 4px solid var(--main-color); }
-        input[type="text"], input[type="email"], input[type="number"] { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
-        .option-group { text-align: left; margin: 15px 0; }
-        .option-group label { display: block; padding: 12px; border: 1px solid #eee; margin-bottom: 8px; border-radius: 10px; cursor: pointer; transition: 0.2s; position: relative; }
-        .option-group label:hover { background: #fff0f2; }
-        .btn-group { margin-top: 25px; display: flex; gap: 10px; }
-        .btn { flex: 1; background: var(--main-color); color: white; border: none; padding: 15px; border-radius: 30px; cursor: pointer; font-size: 16px; font-weight: bold; }
-        .btn:disabled { background: #ccc; cursor: not-allowed; }
-        .btn-back { background: #eee; color: #666; }
-        .progress { height: 8px; background: #eee; border-radius: 4px; margin-bottom: 25px; overflow: hidden; }
-        .progress-bar { height: 100%; background: var(--main-color); width: 0%; transition: 0.3s; }
+        .step.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; } }
+
+        .error-msg { color: #e74c3c; font-size: 0.85em; display: none; text-align: center; margin-top: -10px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -35,129 +58,68 @@
         
         <div class="step active">
             <h2>PCOS Check Program</h2>
-            <p>โปรแกรมเข้าใจ PCOS ด้วยตนเอง แบบเป็นขั้นตอน<br>จัดจำหน่ายโดย ISMOM (บริษัท ISMOM2555 จำกัด)</p>
+            <p>โปรแกรมเข้าใจ PCOS ด้วยตนเอง<br>โดย ISMOM</p><br>
             <button type="button" class="btn" onclick="nextStep()">เริ่มโปรแกรม</button>
         </div>
 
-        <div class="step">
+        <div class="step" data-validate="input">
             <h2>อีเมลของคุณ</h2>
-            <p>ระบุอีเมลเพื่อรับผลการประเมิน</p>
             <input type="email" name="email" placeholder="example@email.com" required>
+            <p class="error-msg">กรุณากรอกอีเมลให้ถูกต้อง</p>
             <div class="btn-group">
                 <button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button>
-                <button type="button" class="btn" onclick="nextStep()">ต่อไป</button>
+                <button type="button" class="btn" onclick="validateAndNext(this)">ต่อไป</button>
             </div>
         </div>
 
-        <div class="step">
+        <div class="step" data-validate="input">
             <h2>ข้อมูลเบื้องต้น</h2>
             <input type="text" name="nickname" placeholder="ชื่อเล่น" required>
             <input type="number" name="age" placeholder="อายุ" required>
+            <p class="error-msg">กรุณากรอกข้อมูลให้ครบถ้วน</p>
             <div class="btn-group">
                 <button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button>
-                <button type="button" class="btn" onclick="nextStep()">ต่อไป</button>
+                <button type="button" class="btn" onclick="validateAndNext(this)">ต่อไป</button>
             </div>
         </div>
 
-        <div class="step">
+        <div class="step" data-validate="checkbox">
             <h2>หมวดที่ 1: รอบประจำเดือน</h2>
-            <p class="instruction">เลือกเฉพาะข้อที่เคยพบ</p>
+            <p class="instruction">เลือกอย่างน้อย 1 ข้อ</p>
             <div class="option-group">
-                <label><input type="checkbox" name="m1" value="ไม่สม่ำเสมอ"> ประจำเดือนมาไม่สม่ำเสมอ</label>
-                <label><input type="checkbox" name="m1" value="รอบยาว"> รอบเดือนยาวเกิน 35 วัน</label>
-                <label><input type="checkbox" name="m1" value="ขาดประจำเดือน"> ขาดประจำเดือนติดต่อกันหลายเดือน</label>
-                <label><input type="checkbox" name="m1" value="ไม่มีอาการเหล่านี้" onclick="clearOthers(this)"> ไม่มีอาการเหล่านี้</label>
+                <label><input type="checkbox" name="m1" value="ไม่สม่ำเสมอ"><span>ประจำเดือนมาไม่สม่ำเสมอ</span></label>
+                <label><input type="checkbox" name="m1" value="รอบยาว"><span>รอบเดือนยาวเกิน 35 วัน</span></label>
+                <label><input type="checkbox" name="m1" value="ขาดประจำเดือน"><span>ขาดประจำเดือนติดต่อกันหลายเดือน</span></label>
+                <label><input type="checkbox" name="m1" value="ไม่มีอาการเหล่านี้" onclick="clearOthers(this)"><span>ไม่มีอาการเหล่านี้</span></label>
             </div>
-            <div class="btn-group"><button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button><button type="button" class="btn" onclick="nextStep()">ต่อไป</button></div>
+            <p class="error-msg">กรุณาเลือกอย่างน้อย 1 ข้อ</p>
+            <div class="btn-group"><button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button><button type="button" class="btn" onclick="validateAndNext(this)">ต่อไป</button></div>
         </div>
 
-        <div class="step">
-            <h2>หมวดที่ 2: ผิวหนัง ขน และเส้นผม</h2>
-            <p class="instruction">เลือกข้อที่เป็นลักษณะเฉพาะของตัวเอง</p>
+        <div class="step" data-validate="checkbox">
+            <h2>หมวดที่ 2: ผิวหนัง ขน และผม</h2>
             <div class="option-group">
-                <label><input type="checkbox" name="m2" value="สิวเรื้อรัง"> สิวเรื้อรัง / สิวขึ้นซ้ำ แม้พ้นวัยรุ่น</label>
-                <label><input type="checkbox" name="m2" value="สิวตามคาง"> สิวขึ้นบริเวณคาง กราม หน้าอก หลัง</label>
-                <label><input type="checkbox" name="m2" value="ขนดก"> ขนดกผิดปกติ (หน้า คาง หน้าอก หน้าท้อง)</label>
-                <label><input type="checkbox" name="m2" value="ผมร่วง"> ผมร่วง ผมบาง โดยเฉพาะกลางศีรษะ</label>
-                <label><input type="checkbox" name="m2" value="ผิวมัน"> ผิวมันมากกว่าปกติ</label>
-                <label><input type="checkbox" name="m2" value="ไม่มีอาการเหล่านี้" onclick="clearOthers(this)"> ไม่มีอาการเหล่านี้</label>
+                <label><input type="checkbox" name="m2" value="สิวเรื้อรัง"><span>สิวเรื้อรัง</span></label>
+                <label><input type="checkbox" name="m2" value="ขนดก"><span>ขนดกผิดปกติ</span></label>
+                <label><input type="checkbox" name="m2" value="ผมร่วง"><span>ผมบางกลางศีรษะ</span></label>
+                <label><input type="checkbox" name="m2" value="ไม่มีอาการเหล่านี้" onclick="clearOthers(this)"><span>ไม่มีอาการเหล่านี้</span></label>
             </div>
-            <div class="btn-group"><button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button><button type="button" class="btn" onclick="nextStep()">ต่อไป</button></div>
+            <p class="error-msg">กรุณาเลือกอย่างน้อย 1 ข้อ</p>
+            <div class="btn-group"><button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button><button type="button" class="btn" onclick="validateAndNext(this)">ต่อไป</button></div>
         </div>
 
-        <div class="step">
-            <h2>หมวดที่ 3: น้ำหนัก & ระบบเผาผลาญ</h2>
-            <div class="option-group">
-                <label><input type="checkbox" name="m3" value="ลดยาก"> น้ำหนักเพิ่มง่าย ลดยาก</label>
-                <label><input type="checkbox" name="m3" value="อ้วนลงพุง"> น้ำหนักขึ้นชัดบริเวณหน้าท้อง (อ้วนลงพุง)</label>
-                <label><input type="checkbox" name="m3" value="หิวบ่อย"> หิวบ่อย อ่อนเพลียง่าย</label>
-                <label><input type="checkbox" name="m3" value="ดื้ออินซูลิน"> เคยถูกบอกว่ามีภาวะดื้อต่ออินซูลิน</label>
-                <label><input type="checkbox" name="m3" value="ไม่มีอาการเหล่านี้" onclick="clearOthers(this)"> ไม่มีอาการเหล่านี้</label>
-            </div>
-            <div class="btn-group"><button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button><button type="button" class="btn" onclick="nextStep()">ต่อไป</button></div>
-        </div>
-
-        <div class="step">
-            <h2>หมวดที่ 4: อารมณ์ & พลังงาน</h2>
-            <div class="option-group">
-                <label><input type="checkbox" name="m4" value="อารมณ์แปรปรวน"> อารมณ์แปรปรวนก่อนมีประจำเดือน</label>
-                <label><input type="checkbox" name="m4" value="เหนื่อยล้า"> เครียดง่าย เหนื่อยล้าเรื้อรัง</label>
-                <label><input type="checkbox" name="m4" value="นอนไม่สนิท"> นอนหลับไม่สนิท / ง่วงทั้งวัน</label>
-                <label><input type="checkbox" name="m4" value="ไม่มีอาการเหล่านี้" onclick="clearOthers(this)"> ไม่มีอาการเหล่านี้</label>
-            </div>
-            <div class="btn-group"><button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button><button type="button" class="btn" onclick="nextStep()">ต่อไป</button></div>
-        </div>
-
-        <div class="step">
-            <h2>หมวดที่ 5: ประวัติการเจริญพันธุ์</h2>
-            <div class="option-group">
-                <label><input type="radio" name="m5" value="พยายามตั้งครรภ์นาน"> พยายามตั้งครรภ์นานกว่า 1 ปี</label>
-                <label><input type="radio" name="m5" value="เคยแท้ง"> เคยแท้งบุตร</label>
-                <label><input type="radio" name="m5" value="ยังไม่เคยพยายาม"> ยังไม่เคยพยายามตั้งครรภ์</label>
-                <label><input type="radio" name="m5" value="ไม่เกี่ยวข้อง"> ไม่เกี่ยวข้อง</label>
-            </div>
-            <div class="btn-group"><button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button><button type="button" class="btn" onclick="nextStep()">ต่อไป</button></div>
-        </div>
-
-        <div class="step">
-            <h2>หมวดที่ 6: ประวัติทางการแพทย์</h2>
-            <div class="option-group">
-                <label><input type="checkbox" name="m6" value="สงสัย PCOS"> เคยถูกบอกว่า “สงสัย PCOS”</label>
-                <label><input type="checkbox" name="m6" value="อัลตราซาวด์"> เคยตรวจอัลตราซาวด์รังไข่</label>
-                <label><input type="checkbox" name="m6" value="ครอบครัวเป็น"> มีคนในครอบครัวเป็น PCOS / เบาหวาน</label>
-                <label><input type="checkbox" name="m6" value="ไม่เคยมีประวัติ" onclick="clearOthers(this)"> ไม่เคยมีประวัติเหล่านี้</label>
-            </div>
-            <div class="btn-group"><button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button><button type="button" class="btn" onclick="nextStep()">ต่อไป</button></div>
-        </div>
-
-        <div class="step">
-            <h2>หมวดที่ 7: คำถามสะท้อนตนเอง</h2>
-            <p>อาการเหล่านี้ส่งผลต่อชีวิตของคุณในระดับใด?</p>
-            <div class="option-group">
-                <label><input type="radio" name="m7" value="ไม่ค่อยส่งผล"> ไม่ค่อยส่งผล</label>
-                <label><input type="radio" name="m7" value="ส่งผลบ้าง"> ส่งผลบ้าง</label>
-                <label><input type="radio" name="m7" value="ส่งผลชัดเจน"> ส่งผลชัดเจน</label>
-            </div>
-            <div class="btn-group"><button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button><button type="button" class="btn" onclick="nextStep()">ไปที่หน้าชำระเงิน</button></div>
-        </div>
-
-        <div class="step">
+        <div class="step" data-validate="radio">
             <h2>การชำระเงิน (790.-)</h2>
-            <p style="background: #eee; padding: 15px; border-radius: 10px;">
-                ธนาคารออมสิน<br>
-                <b>020337687014</b> (บจก. อีสมัม2555)
-            </p>
             <div class="option-group">
-                <label><input type="radio" name="pay_status" value="paid" onclick="toggleSlip(true)"> ชำระเงินเรียบร้อยแล้ว</label>
+                <label><input type="radio" name="pay_status" value="paid" onclick="toggleSlip(true)"><span>ชำระเงินเรียบร้อยแล้ว</span></label>
             </div>
             <div id="slipSection" style="display:none;">
-                <p>แนบสลิปโอนเงิน:</p>
                 <input type="file" id="slipFile" accept="image/*">
-                <input type="text" name="transfer_time" placeholder="เวลาที่โอน (เช่น 14:30)">
             </div>
+            <p class="error-msg">กรุณายืนยันการชำระเงิน</p>
             <div class="btn-group">
                 <button type="button" class="btn btn-back" onclick="prevStep()">ย้อนกลับ</button>
-                <button type="submit" class="btn" id="submitBtn">ยืนยันส่งข้อมูล</button>
+                <button type="submit" class="btn" id="submitBtn">ส่งข้อมูล</button>
             </div>
         </div>
 
@@ -165,13 +127,38 @@
 </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzh0inVSayRyYGiKCki8TA3Ag-zZ96sATnKHekqjIz4ng7_7fYmd-EpgfSpD53E1eVU/exec';
+    const scriptURL = 'YOUR_URL_HERE';
     let currentStep = 0;
     const steps = document.querySelectorAll('.step');
-    const form = document.getElementById('pcosForm');
 
     function updateProgress() {
         document.getElementById('progressBar').style.width = ((currentStep / (steps.length - 1)) * 100) + '%';
+    }
+
+    // ฟังก์ชันตรวจสอบความถูกต้องก่อนไปหน้าถัดไป
+    function validateAndNext(btn) {
+        const step = steps[currentStep];
+        const type = step.getAttribute('data-validate');
+        let isValid = false;
+
+        if (type === 'input') {
+            const inputs = step.querySelectorAll('input[required], input[type="email"]');
+            isValid = Array.from(inputs).every(i => i.value.trim() !== "" && i.checkValidity());
+        } else if (type === 'checkbox' || type === 'radio') {
+            isValid = step.querySelectorAll('input:checked').length > 0;
+        } else {
+            isValid = true;
+        }
+
+        if (isValid) {
+            step.querySelector('.error-msg').style.display = 'none';
+            nextStep();
+        } else {
+            step.querySelector('.error-msg').style.display = 'block';
+            // สั่นปุ่มเบาๆ เพื่อเตือน
+            btn.style.animation = "shake 0.2s ease-in-out 0s 2";
+            setTimeout(() => btn.style.animation = "", 400);
+        }
     }
 
     function nextStep() {
@@ -196,40 +183,11 @@
     }
 
     function toggleSlip(show) { document.getElementById('slipSection').style.display = show ? 'block' : 'none'; }
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        btn.disabled = true;
-        btn.innerHTML = "กำลังส่งข้อมูล...";
-
-        const fileInput = document.getElementById('slipFile');
-        const file = fileInput.files[0];
-
-        const sendData = (base64 = "", type = "", name = "") => {
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-            
-            // ดึงค่า checkbox หมวด 1-4, 6
-            ['m1','m2','m3','m4','m6'].forEach(k => {
-                data[k] = Array.from(document.querySelectorAll(`input[name="${k}"]:checked`)).map(c => c.value).join(', ');
-            });
-
-            data.fileContent = base64;
-            data.fileType = type;
-            data.fileName = name;
-
-            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(data) })
-            .then(() => { alert('ส่งข้อมูลสำเร็จ!'); location.reload(); })
-            .catch(() => { alert('เกิดข้อผิดพลาด'); btn.disabled = false; });
-        };
-
-        if (file) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => sendData(reader.result.split(',')[1], file.type, file.name);
-        } else { sendData(); }
-    });
+    
+    // CSS Shake Animation
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);} }`;
+    document.head.appendChild(style);
 </script>
 </body>
 </html>
